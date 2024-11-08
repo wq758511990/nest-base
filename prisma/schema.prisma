@@ -1,0 +1,38 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Department {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(20)
+  createTime DateTime   @default(now())
+  updateTime DateTime
+  Employee   Employee[]
+}
+
+model Employee {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(50)
+  phone        String     @db.VarChar(50)
+  departmentId Int
+  age          Int
+  Department   Department @relation(fields: [departmentId], references: [id])
+
+  @@index([departmentId], map: "Employee_departmentId_fkey")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique @db.VarChar(50)
+  password    String   @db.VarChar(50)
+  email       String   @db.VarChar(50)
+  nickname    String   @default("") @db.VarChar(50)
+  createdTime DateTime @default(now())
+  updatedTime DateTime @updatedAt
+}
