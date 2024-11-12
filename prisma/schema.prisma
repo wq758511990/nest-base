@@ -33,6 +33,7 @@ model User {
   password    String   @db.VarChar(50)
   email       String   @db.VarChar(50)
   nickname    String   @default("") @db.VarChar(50)
+  age         Int      @default(0)
   createdTime DateTime @default(now())
   updatedTime DateTime @updatedAt
 }

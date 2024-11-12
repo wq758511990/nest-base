@@ -23,16 +23,19 @@ RUN npm config set registry https://registry.npmmirror.com/
 
 COPY prisma ./prisma/
 COPY .env.production ./.env.production
+COPY entrypoint.sh ./entrypoint.sh
 
 RUN npm install --production
+
+RUN chmod +x ./entrypoint.sh
 
 RUN npx prisma generate
 
 ENV NODE_ENV=production
 
 # 同步数据库
-RUN npx dotenv -e .env.production -- npx prisma migrate deploy
+# RUN npx dotenv -e .env.production -- npx prisma migrate deploy
 
 EXPOSE 3000
 
-CMD ["node", "/app/main.js"]
+ENTRYPOINT ["./entrypoint.sh"]
